@@ -1,0 +1,8 @@
+applications:
+- path: .
+  memory: 256M
+  instances: 1
+  domain: mybluemix.net
+  name: CS252-Hanjing-Test
+  host: cs252-hanjing-test
+  disk_quota: 1024M
