@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+<style style="text/css">
+body {
+	background-image: url("/images/bg.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center ;
+}
+#button1 {
+  position: absolute;
+  top:150px;
+  left:400px;
+}
+
+#button2 {
+  position: absolute;
+  top:200px;
+  left:400px;
+}
+
+#button3 {
+  position: absolute;
+  top:250px;
+  left:400px;
+}	
+  
+#button4 {
+  position: absolute;
+  top:150px;
+  right:250px;
+  }
+
+#input1 {
+	position: absolute;
+	top:150px;
+}
+
+</style>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+</head>
+<body>
+<div>
+<p style="position:fixed; top:150px; left:750px;"> You are in Town</p>
+    </div>
+
+<div ng-app="MyAPP" ng-controller="MyCtrl" id="popupContainer" style="text-align:center">
+	
+	<div>
+		
+		<md-button id="button1" class="md-raised" ng-click="backToIndex()">Hunt</md-button>
+	</div>
+<div>
+  <md-menu>
+ <md-button id="button4" class="md-raised" ng-click="openMenu($mdOpenMenu, $event)">
+        Menu
+      </md-button>
+    
+    <md-menu-content width="4">
+      <md-menu-item>
+        <md-button class="md-raised" ng-click="showCharacter($event)">Character</md-button>   
+        
+      </md-menu-item>
+    </md-menu-content>
+    </md-menu>
+</div>
+ <script type="text/ng-template" id="dialog1.tmpl.html"><md-dialog aria-label="Character Info"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Character Info</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="/images/ic_clear_black_24dp_1x.png" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>Character Name:</p>
+        <p>STR:</p>
+        <p>DEX:</p>
+        <p>INT:</p>       
+      </div>
+    </md-dialog-content>
+	
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()" style="margin-right:20px;">
+        Cancel
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>
+ 
+	
+</div>
+<script src="js.js"></script>
+</body>
+</html>
