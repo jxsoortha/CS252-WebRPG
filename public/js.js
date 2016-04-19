@@ -1,16 +1,26 @@
-var MyAPP = angular.module('MyAPP',['ngMaterial','ngMessages',]);
-MyAPP.controller('MyCtrl', function($scope, $mdDialog,$mdMedia,$location,$window,$document) {
-    $scope.name="Xu";
-    $scope.imgUrl='/images/bg.jpg';
-    $scope.currentLoc='index';
+var MyAPP = angular.module('MyAPP',['ngMaterial','ngMessages']);
+
+MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$location,$window,$document) {
+
+    $scope.login = function(charName) {
+
+        $rootScope.currentCharName=charName;
+        
+        $scope.currentLoc='Outside';
+        $scope.imgUrl='/images/Outside.png';
+    }
+
+
     $scope.goToTown = function() {
         $scope.currentLoc='Town';
-        $scope.imgUrl='/images/bg1.png';
+        $scope.imgUrl='/images/Town.jpg';
     };
-    $scope.backToIndex = function() {
-      $scope.currentLoc='index';
-        $scope.imgUrl='/images/bg.jpg';
+    $scope.goToOutside = function() {
+      $scope.currentLoc='Outside';
+        $scope.imgUrl='/images/Outside.png';
     };
+    var charString = 'Knight,10,20,30';
+    var charInfo = charString.split(',');
 
 
     var originEv;
@@ -24,8 +34,8 @@ MyAPP.controller('MyCtrl', function($scope, $mdDialog,$mdMedia,$location,$window
     $scope.showCharacter = function(ev) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
-            controller: DialogController,
-            templateUrl: 'dialog1.tmpl.html',
+            controller: "MyCtrl",
+            templateUrl: 'dialog.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
@@ -40,9 +50,6 @@ MyAPP.controller('MyCtrl', function($scope, $mdDialog,$mdMedia,$location,$window
         });
     };
 
-
-});
-function DialogController($scope, $mdDialog) {
     $scope.hide = function() {
         $mdDialog.hide();
     };
@@ -54,6 +61,12 @@ function DialogController($scope, $mdDialog) {
     $scope.answer = function(answer) {
         $mdDialog.hide(answer);
     };
+
+
+
+});
+function DialogController($scope, $mdDialog) {
+
 }
 
 
