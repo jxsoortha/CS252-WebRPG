@@ -9,36 +9,36 @@
 <style style="text/css">
 
     #button1 {
-        position: absolute;
+        position: fixed;
         top:150px;
         left:400px;
     }
 
     #button2 {
-        position: absolute;
+        position: fixed;
         top:200px;
         left:400px;
     }
 
     #button3 {
-        position: absolute;
+        position: fixed;
         top:250px;
         left:400px;
     }
 
-    #button4 {
-        position: absolute;
+    #MenuButton {
+        position: fixed;
         top:150px;
         right:250px;
     }
 
     #input1 {
-        position: absolute;
+        position: fixed;
         top:150px;
     }
 
     #submitButton {
-        position: absolute;
+        position: fixed;
         top:50%;
         left:62%;
     }
@@ -53,20 +53,31 @@
 <div ng-app="MyAPP" ng-controller="MyCtrl" data-ng-init="currentLoc='login'">
     <div ng-show="currentLoc=='login'">
         <p style="position:fixed; top: 50%; left:40%">Character Name: <input type="text" ng-model="charName"></p>
+        <p style="position:fixed; top: 60%; left:43.3%">Password: <input type="password" ng-model="charPassword"></p>
         <md-button id="submitButton" class="md-raised" ng-click="login(charName)">Submit</md-button>
     </div>
     <div style="background-image: url({{imgUrl}}); background-size: cover;  height: 1080px; width: 1920px;"> </div>
     <div ng-show="currentLoc=='Outside'">
 
         <md-button id="button1" class="md-raised" ng-click="goToTown()" >Town</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCombat()">Combat</md-button>
     </div>
     <div ng-show="currentLoc=='Town'">
         <md-button id="button1" class="md-raised" ng-click="goToOutside()" >Outside</md-button>
     </div>
+    <div ng-show="currentLoc=='Combat'">
+        <h1 style="font-size:120%;position:fixed; top:80%; left:15%">HP:{{characterHP}}/{{characterMaxHP}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:15%; left:55%">Enemy HP:{{EnemyHP}}/{{EnemyMaxHP}}</h1>
+        <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
+        <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
+        <md-button style="position:fixed;top:65%;left:75%" class="md-raised"  >Skill</md-button>
+        <md-button style="position:fixed;top:75%;left:75%" class="md-raised"  >Item</md-button>
+        <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:50%"/>
+    </div>
 
     <div ng-show="currentLoc!='login'">
         <md-menu>
-            <md-button id="button4" class="md-raised" ng-click="openMenu($mdOpenMenu, $event)">
+            <md-button id="MenuButton" class="md-raised" ng-click="openMenu($mdOpenMenu, $event)">
                 Menu
             </md-button>
 
@@ -108,6 +119,34 @@
         </md-dialog-actions>
     </form>
     </md-dialog>
+    </script>
+
+    <script type="text/ng-template" id="victory.html" >
+        <md-dialog aria-label="victory">
+            <form>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>You are victorious!</h2>
+                        <span flex></span>
+
+                    </div>
+                </md-toolbar>
+
+                <md-dialog-content>
+                    <div class="md-dialog-content"  >
+                        <p>EXP Earned:</p>
+                        <p>Money Earned:</p>
+                    </div>
+                </md-dialog-content>
+
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="cancel()" style="margin-right:20px;">
+                        Cancel
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
     </script>
 
 </div>
