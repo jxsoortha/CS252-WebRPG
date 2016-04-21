@@ -19,7 +19,7 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 
 app.use(function(req, res, next) {
-  res.status(404).send("hello: " + req.originalURL + " " + next);
+  res.status(404).send('Sorry cant find that!');
 });
 
 // get the app environment from Cloud Foundry

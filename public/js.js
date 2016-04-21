@@ -12,7 +12,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
 
     $scope.goToTown = function() {
         $scope.currentLoc='Town';
-        $scope.imgUrl='/images/Town.jpg';
+        $scope.imgUrl='/images/startervillage.png';
     };
     $scope.goToOutside = function() {
       $scope.currentLoc='Outside';
