@@ -57,13 +57,23 @@
         <md-button id="submitButton" class="md-raised" ng-click="login(charName)">Submit</md-button>
     </div>
     <div style="background-image: url({{imgUrl}}); background-size: cover;  height: 1080px; width: 1920px;"> </div>
-    <div ng-show="currentLoc=='Outside'">
+    <div ng-show="currentLoc=='Town'">
 
-        <md-button id="button1" class="md-raised" ng-click="goToTown()" >Town</md-button>
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()" >Leave Town</md-button>
+    </div>
+    <div ng-show="currentLoc=='CapitalRoad1'">
+
+        <md-button id="button1" class="md-raised" ng-click="goToTown()" >Enter Town</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
+        <md-button id="button3" class="md-raised" ng-click="goToCombat()">Combat</md-button>
+    </div>
+    <div ng-show="currentLoc=='CapitalRoad2'">
+
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()">Go to Capital Road 1</md-button>
         <md-button id="button2" class="md-raised" ng-click="goToCombat()">Combat</md-button>
     </div>
     <div ng-show="currentLoc=='Town'">
-        <md-button id="button1" class="md-raised" ng-click="goToOutside()" >Outside</md-button>
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()" >Leave Town</md-button>
     </div>
     <div ng-show="currentLoc=='Combat'">
         <h1 style="font-size:120%;position:fixed; top:80%; left:15%">HP:{{characterHP}}/{{characterMaxHP}}</h1>
@@ -105,9 +115,13 @@
             <div class="md-dialog-content"  >
                 <p>{{$parent.currentLoc}}</p>
                 <p>Character Name:{{$parent.currentCharName}}</p>
-                <p>STR:</p>
-                <p>DEX:</p>
-                <p>INT:</p>
+                <p>Level:{{$parent.currentLVL}}</p>
+                <p>EXP:{{$parent.currentEXP}}</p>
+                <p>-----Current Stats-----</p>
+                <p>STR:{{$parent.currentSTR}}</p>
+                <p>DEX:{{$parent.currentDEX}}</p>
+                <p>INT:{{$parent.currentINT}}</p>
+                <p>LUK:{{$parent.currentINT}}</p>
             </div>
         </md-dialog-content>
 
@@ -134,8 +148,8 @@
 
                 <md-dialog-content>
                     <div class="md-dialog-content"  >
-                        <p>EXP Earned:</p>
-                        <p>Money Earned:</p>
+                        <p>EXP Earned:{{$parent.EnemyEXPreward}}</p>
+                        <p>Money Earned: 0</p>
                     </div>
                 </md-dialog-content>
 
