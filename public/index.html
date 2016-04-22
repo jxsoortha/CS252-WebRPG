@@ -25,6 +25,12 @@
         top:250px;
         left:400px;
     }
+    
+    #buttonC {
+        position: fixed;
+        top:150px;
+        left:600px;
+    }
 
     #MenuButton {
         position: fixed;
@@ -65,19 +71,25 @@
 
         <md-button id="button1" class="md-raised" ng-click="goToTown()" >Enter Town</md-button>
         <md-button id="button2" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
-        <md-button id="button3" class="md-raised" ng-click="goToCombat()">Combat</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='CapitalRoad2'">
 
         <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()">Go to Capital Road 1</md-button>
-        <md-button id="button2" class="md-raised" ng-click="goToCombat()">Combat</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCapitalRoad3()">Go to Capital Road 3</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
+    </div>
+    <div ng-show="currentLoc=='CapitalRoad3'">
+
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='Town'">
         <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()" >Leave Town</md-button>
     </div>
     <div ng-show="currentLoc=='Combat'">
         <h1 style="font-size:120%;position:fixed; top:80%; left:15%">HP:{{characterHP}}/{{characterMaxHP}}</h1>
-        <h1 style="font-size:120%;position:fixed; top:15%; left:55%">Enemy HP:{{EnemyHP}}/{{EnemyMaxHP}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:6%; left:50%">Enemy HP:{{EnemyHP}}/{{EnemyMaxHP}}</h1>
         <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
         <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
         <md-button style="position:fixed;top:65%;left:75%" class="md-raised"  >Skill</md-button>
@@ -93,7 +105,7 @@
 
             <md-menu-content width="4">
                 <md-menu-item>
-                    <md-button class="md-raised" ng-click="showCharacter($event)">Character</md-button>
+                    <p><md-button class="md-raised" ng-click="showCharacter($event)">Character Stats</md-button></p>
 
                 </md-menu-item>
             </md-menu-content>
@@ -115,13 +127,27 @@
             <div class="md-dialog-content"  >
                 <p>{{$parent.currentLoc}}</p>
                 <p>Character Name:{{$parent.currentCharName}}</p>
+                <p>HP:{{$parent.characterHP}}/{{$parent.characterMaxHP}}
                 <p>Level:{{$parent.currentLVL}}</p>
-                <p>EXP:{{$parent.currentEXP}}</p>
+                <p>EXP:{{$parent.currentEXP}}/{{$parent.nextLvlEXP}}</p>
                 <p>-----Current Stats-----</p>
-                <p>STR:{{$parent.currentSTR}}</p>
-                <p>DEX:{{$parent.currentDEX}}</p>
-                <p>INT:{{$parent.currentINT}}</p>
-                <p>LUK:{{$parent.currentINT}}</p>
+                <p>STR:{{$parent.currentSTR}}
+                <md-button ng-click="addSTR()" style="margin-left:5px;">
+                        +
+                    </md-button></p>
+                <p>DEX:{{$parent.currentDEX}}
+                <md-button ng-click="addDEX()" style="margin-left:5px;">
+                        +
+                    </md-button></p>
+                <p>INT:{{$parent.currentINT}}
+                <md-button ng-click="addINT()" style="margin-left:5px;">
+                        +
+                    </md-button></p>
+                <p>LUK:{{$parent.currentLUK}}
+                <md-button ng-click="addLUK()" style="margin-left:5px;">
+                        +
+                    </md-button></p>
+                    <p>SP: {{$parent.currentSP}}</p>
             </div>
         </md-dialog-content>
 
