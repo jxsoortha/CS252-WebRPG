@@ -12,7 +12,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $rootScope.currentLUK=5;
         $rootScope.currentLVL=1;
         $rootScope.currentEXP=0;
-        $rootScope.nextLvlEXP=30;
+        $rootScope.nextLvlEXP=20;
         $rootScope.currentSP=5;
         $rootScope.characterMaxHP=50;
         $rootScope.characterHP=$rootScope.characterMaxHP;
@@ -117,27 +117,27 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
 		{
 			$rootScope.EnemyEXPreward=21;
        	 	$rootScope.EnemyMoneyreward=0;
-       		$scope.EnemyMaxHP=120;
-      	  	$scope.EnemyPdef=2;
+       		$scope.EnemyMaxHP=100;
+      	  	$scope.EnemyPdef=1;
        	 	$scope.EnemyPatk=12;
       	  	$scope.enemyImgUrl='/images/wolfsmall.png';
    	 	}
    	 	else if (monName.localeCompare("rabbit")===0)
    	 	{
-   	 		$rootScope.EnemyEXPreward=6;
-       	 	$rootScope.EnemyMoneyreward=10;
-       		$scope.EnemyMaxHP=65;
-      	  	$scope.EnemyPdef=5;
-       	 	$scope.EnemyPatk=10;
+   	 		$rootScope.EnemyEXPreward=12;
+       	 	$rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
+       		$scope.EnemyMaxHP=32;
+      	  	$scope.EnemyPdef=1;
+       	 	$scope.EnemyPatk=5;
       	  	$scope.enemyImgUrl='/images/rabbit.png';
    	 	}
    	 	else
    	 	{
-   	 		$rootScope.EnemyEXPreward=4;
+   	 		$rootScope.EnemyEXPreward=3;
        	 	$rootScope.EnemyMoneyreward=0;
-       		$scope.EnemyMaxHP=50;
-      	  	$scope.EnemyPdef=2;
-       	 	$scope.EnemyPatk=2;
+       		$scope.EnemyMaxHP=10;
+      	  	$scope.EnemyPdef=1;
+       	 	$scope.EnemyPatk=1;
       	  	$scope.enemyImgUrl='/images/slime.png';
    	 	}
 
@@ -164,7 +164,9 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         }
     }
 	$scope.getNormalAttackDamage = function(){
-		return Math.ceil($rootScope.currentSTR+0.5*$rootScope.currentDEX+5);
+		var low = Math.ceil(0.1*$rootScope.currentSTR+0.2*$rootScope.currentDEX);
+		var high = Math.ceil($rootScope.currentSTR+0.6*$rootScope.currentDEX);
+		return parseInt(getRandomInt(low,high),10);
 	}
     $scope.run = function() {
     	$scope.goToLocation($scope.lastLoc);
@@ -181,8 +183,8 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     }
     var victory = function() {
         $rootScope.currentEXP=$rootScope.currentEXP+$scope.EnemyEXPreward;
-        showVict();
         $scope.goToLocation($scope.lastLoc);
+        showVict();
     }
     var defeat = function() {
     	$mdDialog.show(
