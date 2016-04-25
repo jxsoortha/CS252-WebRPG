@@ -7,7 +7,10 @@
   },
   "dependencies": {
     "cfenv": "1.0.x",
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "ibm_db": "x.x.x",
+    "body-parser" : "x.x",
+    "path": "x"
   },
   "repository": {},
   "engines": {
