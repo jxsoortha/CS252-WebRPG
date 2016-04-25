@@ -60,7 +60,7 @@
     <div ng-show="currentLoc=='login'">
         <p style="position:fixed; top: 50%; left:40%">Character Name: <input type="text" ng-model="charName"></p>
         <p style="position:fixed; top: 60%; left:43.3%">Password: <input type="password" ng-model="charPassword"></p>
-        <md-button id="submitButton" class="md-raised" ng-click="login(charName)">Submit</md-button>
+        <md-button id="submitButton" class="md-raised" ng-click="login(charName,charPassword)">Submit</md-button>
     </div>
     <div style="background-image: url({{imgUrl}}); background-size: cover;  height: 1080px; width: 1920px;"> </div>
     <div ng-show="currentLoc=='Town'">
@@ -76,7 +76,13 @@
     <div ng-show="currentLoc=='CapitalRoad2'">
 
         <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()">Go to Capital Road 1</md-button>
-        <md-button id="button2" class="md-raised" ng-click="goToCapitalRoad3()">Go to Capital Road 3</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToLake()">Go to Lake</md-button>
+        <md-button id="button3" class="md-raised" ng-click="goToCapitalRoad3()">Go to Capital Road 3</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
+    </div>
+    <div ng-show="currentLoc=='Lake'">
+
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 1</md-button>
         <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='CapitalRoad3'">

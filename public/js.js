@@ -1,24 +1,39 @@
 var MyAPP = angular.module('MyAPP',['ngMaterial','ngMessages']);
 
-MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$location,$window,$timeout) {
+MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$location,$window,$timeout,$http) {
 
-    $scope.login = function(charName) {
+    $scope.login = function(charName,charPassword) {
 
         $rootScope.currentCharName=charName;
         
-        $rootScope.currentSTR=5;
-        $rootScope.currentDEX=5;
-        $rootScope.currentINT=5;
-        $rootScope.currentLUK=5;
+        $http.get("LOGIN?" + $rootScope.currentCharName + "?" + charPassword).then(function(response) {
+    });
+        
+        $rootScope.currentSTR=1;
+        $rootScope.currentDEX=1;
+        $rootScope.currentINT=1;
+        $rootScope.currentLUK=1;
         $rootScope.currentLVL=1;
         $rootScope.currentEXP=0;
-        $rootScope.nextLvlEXP=20;
-        $rootScope.currentSP=5;
+        $rootScope.nextLvlEXP=30;
+        $rootScope.currentSP=16;
         $rootScope.characterMaxHP=50;
+        $rootScope.characterMaxMP=20;
         $rootScope.characterHP=$rootScope.characterMaxHP;
+        $rootScope.characterMP=$rootScope.characterMaxMP=$rootScope.characterMaxMP;
         $rootScope.currentMoney=0;
         
         $scope.goToLocation("Town");
+        $mdDialog.show(
+        $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('Welcome! Please use the menu button on the top right corner to assign stat points(SP) to your character!')
+
+                .ok('Cancel')
+            );
+
     };
 
 	$scope.checkLvlUp = function(){
@@ -56,9 +71,9 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $scope.imgUrl='/images/roadtocap1.png';
         
         var RNG = parseInt(getRandomInt(0,10),10);
-        if (RNG > 8)
+        if (RNG > 5)
         {
-        	$scope.spawnEnemy("rabbit");
+        	$scope.spawnEnemy("greenslime");
         }
         else
         {
@@ -68,7 +83,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     };
     $scope.goToCapitalRoad2 = function() {
       $scope.currentLoc='CapitalRoad2';
-        $scope.imgUrl='/images/Outside.png';
+        $scope.imgUrl='/images/caproad2.png';
         
         var RNG = parseInt(getRandomInt(0,10),10);
         if (RNG === 0)
@@ -76,15 +91,30 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         	//attacked on entry
         	$scope.spawnEnemy("slime");
         	$scope.goToCombat();
+        	$mdDialog.show(
+        	$mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('You have been ambushed!')
+
+                .ok('Cancel')
+            );
     	}
     	else if (RNG > 5)
     	{
-    		$scope.spawnEnemy("wolf");
+    		$scope.spawnEnemy("gslime");
 		}
 		else
 		{
-			$scope.spawnEnemy("rabbit");
+			$scope.spawnEnemy("slime");
 		}
+
+    };
+    $scope.goToLake = function() {
+      $scope.currentLoc='Lake';
+        $scope.imgUrl='/images/lake.png';
+		$scope.spawnEnemy("wolf");
 
     };
     $scope.goToCapitalRoad3 = function() {
@@ -101,6 +131,10 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     	else if (location.localeCompare("CapitalRoad2")===0 )
     	{
     		$scope.goToCapitalRoad2();
+    	}
+    	else if (location.localeCompare("Lake")===0 )
+    	{
+    		$scope.goToLake;
     	}
     	else if (location.localeCompare("CapitalRoad3")===0 )
     	{
@@ -125,19 +159,28 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
    	 	else if (monName.localeCompare("rabbit")===0)
    	 	{
    	 		$rootScope.EnemyEXPreward=12;
-       	 	$rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
-       		$scope.EnemyMaxHP=32;
+       	 	$rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,250),10);
+       		$scope.EnemyMaxHP=40;
       	  	$scope.EnemyPdef=1;
        	 	$scope.EnemyPatk=5;
       	  	$scope.enemyImgUrl='/images/rabbit.png';
    	 	}
+   	 	else if (monName.localeCompare("greenslime")===0)
+   	 	{
+   	 		$rootScope.EnemyEXPreward=15;
+       	 	$rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
+       		$scope.EnemyMaxHP=45;
+      	  	$scope.EnemyPdef=5;
+       	 	$scope.EnemyPatk=5;
+      	  	$scope.enemyImgUrl='/images/gslime.png';
+   	 	}
    	 	else
    	 	{
-   	 		$rootScope.EnemyEXPreward=3;
+   	 		$rootScope.EnemyEXPreward=6;
        	 	$rootScope.EnemyMoneyreward=0;
-       		$scope.EnemyMaxHP=10;
-      	  	$scope.EnemyPdef=1;
-       	 	$scope.EnemyPatk=1;
+       		$scope.EnemyMaxHP=22;
+      	  	$scope.EnemyPdef=2;
+       	 	$scope.EnemyPatk=2;
       	  	$scope.enemyImgUrl='/images/slime.png';
    	 	}
 
@@ -164,8 +207,8 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         }
     }
 	$scope.getNormalAttackDamage = function(){
-		var low = Math.ceil(0.1*$rootScope.currentSTR+0.2*$rootScope.currentDEX);
-		var high = Math.ceil($rootScope.currentSTR+0.6*$rootScope.currentDEX);
+		var low = Math.ceil(0.01*$rootScope.currentSTR+0.25*$rootScope.currentDEX);
+		var high = Math.ceil($rootScope.currentSTR+0.5*$rootScope.currentDEX);
 		return parseInt(getRandomInt(low,high),10);
 	}
     $scope.run = function() {
@@ -183,8 +226,8 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     }
     var victory = function() {
         $rootScope.currentEXP=$rootScope.currentEXP+$scope.EnemyEXPreward;
-        $scope.goToLocation($scope.lastLoc);
         showVict();
+        $scope.goToLocation($scope.lastLoc);
     }
     var defeat = function() {
     	$mdDialog.show(
