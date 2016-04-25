@@ -1,6 +1,19 @@
 var MyAPP = angular.module('MyAPP',['ngMaterial','ngMessages']);
 
 MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$location,$window,$timeout,$http) {
+	
+    function FormHelper() {
+        this.data = "";
+
+        this.append = function(name, val) {
+            if (this.data.length > 0) {
+                this.data += "&";
+            }
+            this.data += encodeURIComponent(name);
+            this.data += "=";
+            this.data += encodeURIComponent(val);
+        };
+    }
 
     $scope.imgUrl='/images/treehouse.jpg';
 
