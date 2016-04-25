@@ -58,8 +58,8 @@
 
 <div ng-app="MyAPP" ng-controller="MyCtrl" data-ng-init="currentLoc='login'">
     <div ng-show="currentLoc=='login'">
-        <p style="position:fixed; top: 50%; left:40%">Character Name: <input type="text" ng-model="charName"></p>
-        <p style="position:fixed; top: 60%; left:43.3%">Password: <input type="password" ng-model="charPassword"></p>
+        <p style="position:fixed; top: 50%; left:40%; color:white">Character Name: <input type="text" ng-model="charName"></p>
+        <p style="position:fixed; top: 60%; left:43.3%; color:white">Password: <input type="password" ng-model="charPassword"></p>
         <md-button id="submitButton" class="md-raised" ng-click="login(charName,charPassword)">Submit</md-button>
     </div>
     <div style="background-image: url({{imgUrl}}); background-size: cover;  height: 1080px; width: 1920px;"> </div>
