@@ -31,6 +31,11 @@
         top:150px;
         left:600px;
     }
+    #buttonB {
+        position: fixed;
+        top:200px;
+        left:600px;
+    }
 
     #MenuButton {
         position: fixed;
@@ -88,19 +93,39 @@
     <div ng-show="currentLoc=='CapitalRoad3'">
 
         <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCapital()">Enter Capital</md-button>
         <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='Town'">
         <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad1()" >Leave Town</md-button>
     </div>
+    <div ng-show="currentLoc=='Capital'">
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad3()" >Leave Town</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToShop()">Shop</md-button>
+    </div>
     <div ng-show="currentLoc=='Combat'">
         <h1 style="font-size:120%;position:fixed; top:80%; left:15%">HP:{{characterHP}}/{{characterMaxHP}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:90%; left:15%">MP:{{characterMP}}/{{characterMaxMP}}</h1>
         <h1 style="font-size:120%;position:fixed; top:6%; left:50%">Enemy HP:{{EnemyHP}}/{{EnemyMaxHP}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:82%; left:82%">{{currentPotions}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:82%; left:92%">{{currentBombs}}</h1>
         <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
         <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
         <md-button style="position:fixed;top:65%;left:75%" class="md-raised"  >Skill</md-button>
-        <md-button style="position:fixed;top:75%;left:75%" class="md-raised"  >Item</md-button>
+        <md-button style="position:fixed;top:75%;left:75%" class="md-raised" ng-click="usePotion()" ><img ng-src="/images/potion.png"></md-button>
+        <md-button style="position:fixed;top:75%;left:85%" class="md-raised" ng-click="useBomb()" ><img ng-src="/images/bomb.png"></md-button>
         <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:50%"/>
+    </div>
+    <div ng-show="currentLoc=='Shop'">
+        <h1 style="font-size:120%;position:fixed; top:10%; left:75%">Money:{{currentMoney}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:30%; left:40%">Potion cost: 50</h1>
+        <h1 style="font-size:120%;position:fixed; top:45%; left:40%">Bomb cost: 200</h1>
+        <h1 style="font-size:120%;position:fixed; top:29%; left:50%">Owned:{{currentPotions}}</h1>
+        <h1 style="font-size:120%;position:fixed; top:43%; left:50%">Owned:{{currentBombs}}</h1>
+        <md-button style="position:fixed;top:24%;left:33%" class="md-raised" ng-click="buyPotion()" ><img ng-src="/images/potion.png"></md-button>
+        <md-button style="position:fixed;top:38%;left:33%" class="md-raised" ng-click="buyBomb()" ><img ng-src="/images/bomb.png"></md-button>
+        <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="leaveShop()" >Leave Shop</md-button>
+        <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:10%"/>
     </div>
 
     <div ng-show="currentLoc!='login'">
@@ -111,8 +136,9 @@
 
             <md-menu-content width="4">
                 <md-menu-item>
-                    <p><md-button class="md-raised" ng-click="showCharacter($event)">Character Stats</md-button></p>
-
+                    <md-button class="md-raised" ng-click="showCharacter($event)">Character</md-button><br>
+					<md-button class="md-raised" ng-click="showInventory($event)">Inventory</md-button>
+					<md-button class="md-raised" ng-click="showSkills($event)">Skills</md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
@@ -166,6 +192,61 @@
     </form>
     </md-dialog>
     </script>
+    
+    <script type="text/ng-template" id="inventory.html" >
+        <md-dialog aria-label="Inventory">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Inventory</h2>
+                <span flex></span>
+
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content"  >
+                <p>Money: {{$parent.currentMoney}}</p>
+                <p>Potions: {{$parent.currentPotions}}</p>
+                <p>Bombs: {{$parent.currentBombs}}</p>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()" style="margin-right:20px;">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    </md-dialog>
+    </script>
+    
+    <script type="text/ng-template" id="skills.html" >
+        <md-dialog aria-label="Skills">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Skills</h2>
+                <span flex></span>
+
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content"  >
+                <p>{{$parent.currentLoc}}</p>
+                <p>Skills</p>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()" style="margin-right:20px;">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    </md-dialog>
+    </script>
 
     <script type="text/ng-template" id="victory.html" >
         <md-dialog aria-label="victory">
@@ -181,7 +262,7 @@
                 <md-dialog-content>
                     <div class="md-dialog-content"  >
                         <p>EXP Earned:{{$parent.EnemyEXPreward}}</p>
-                        <p>Money Earned: 0</p>
+                        <p>Money Earned:{{$parent.EnemyMoneyreward}}</p>
                     </div>
                 </md-dialog-content>
 

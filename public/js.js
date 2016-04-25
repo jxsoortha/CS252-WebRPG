@@ -2,6 +2,8 @@ var MyAPP = angular.module('MyAPP',['ngMaterial','ngMessages']);
 
 MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$location,$window,$timeout,$http) {
 	
+	$scope.imgUrl='/images/treehouse.jpg';
+	
     function FormHelper() {
         this.data = "";
 
@@ -61,7 +63,9 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $rootScope.characterMaxMP=20;
         $rootScope.characterHP=$rootScope.characterMaxHP;
         $rootScope.characterMP=$rootScope.characterMaxMP=$rootScope.characterMaxMP;
-        $rootScope.currentMoney=0;
+        $rootScope.currentMoney=100;
+        $rootScope.currentPotions=0;
+        $rootScope.currentBombs=0;
 
         $scope.goToLocation("Town");
         $mdDialog.show(
@@ -84,6 +88,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             $rootScope.currentEXP = $rootScope.currentEXP - $rootScope.nextLvlEXP;
             $rootScope.nextLvlEXP = Math.pow($scope.currentLVL,2)*12 + $scope.currentLVL*8 + 10;
             $rootScope.characterMaxHP = $rootScope.characterMaxHP+10+Math.ceil($rootScope.currentSTR*0.2);
+            $rootScope.characterMaxMP = $rootScope.characterMaxMP+2+Math.ceil($rootScope.currentINT*0.8);
             $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('#popupContainer')))
@@ -101,7 +106,16 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $scope.imgUrl='/images/startervillage.png';
         $scope.checkLvlUp();
         $rootScope.characterHP=$rootScope.characterMaxHP;
+        $rootScope.characterMP=$rootScope.characterMaxMP;
     };
+    $scope.goToCapital = function() {
+        $scope.currentLoc='Capital';
+        $scope.imgUrl='/images/capital.png';
+        $scope.checkLvlUp();
+        $rootScope.characterHP=$rootScope.characterMaxHP;
+        $rootScope.characterMP=$rootScope.characterMaxMP;
+    };
+    
     $scope.goToOutside = function() {
         $scope.currentLoc='Outside';
         $scope.imgUrl='/images/Outside.png';
@@ -111,7 +125,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $scope.imgUrl='/images/roadtocap1.png';
 
         var RNG = parseInt(getRandomInt(0,10),10);
-        if (RNG > 5)
+        if (RNG > 9)
         {
             $scope.spawnEnemy("greenslime");
         }
@@ -141,9 +155,9 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
                     .ok('Cancel')
             );
         }
-        else if (RNG > 5)
+        else if (RNG > 2)
         {
-            $scope.spawnEnemy("gslime");
+            $scope.spawnEnemy("greenslime");
         }
         else
         {
@@ -154,13 +168,21 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     $scope.goToLake = function() {
         $scope.currentLoc='Lake';
         $scope.imgUrl='/images/lake.png';
-        $scope.spawnEnemy("wolf");
+        $scope.spawnEnemy("rabbit");
 
     };
     $scope.goToCapitalRoad3 = function() {
         $scope.currentLoc='CapitalRoad3';
         $scope.imgUrl='/images/outsidecapital.png';
-        $scope.spawnEnemy("slime");
+        var RNG = parseInt(getRandomInt(0,10),10);
+        if (RNG > 4)
+        {
+            $scope.spawnEnemy("greenslime");
+        }
+        else
+        {
+            $scope.spawnEnemy("slime");
+        }
 
     };
     $scope.goToLocation = function(location) {
@@ -180,46 +202,88 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         {
             $scope.goToCapitalRoad3();
         }
+        else if (location.localeCompare("Capital")===0 )
+        {
+            $scope.goToCapital();
+        }
         else
         {
             $scope.goToTown();
         }
     }
+    $scope.goToNearestTown = function(location) {
+        if (location.localeCompare("CapitalRoad3")===0 || location.localeCompare("Capital")===0)
+        {
+            $scope.goToCapital();
+        }
+		else
+        {
+            $scope.goToTown();
+        }
+    }
+    
+    $scope.goToShop = function() {
+    	$scope.lastLoc=$scope.currentLoc;
+    	$scope.currentLoc='Shop';
+    	$scope.enemyImgUrl='/images/shop1.png';
+    	$scope.imgUrl='images/combat.png';
+    }
+    $scope.buyBomb = function(){
+    	if ($rootScope.currentMoney >= 200)
+        {
+            $rootScope.currentBombs = $rootScope.currentBombs + 1;
+            $rootScope.currentMoney = $rootScope.currentMoney -50;
+        }
+    }
+    $scope.buyPotion = function(){
+    	if ($rootScope.currentMoney >= 50)
+        {
+            $rootScope.currentPotions = $rootScope.currentPotions + 1;
+            $rootScope.currentMoney = $rootScope.currentMoney -10;
+        }
+    }
+    $scope.leaveShop = function(){
+    	$scope.goToLocation($scope.lastLoc);
+    }
 
     $scope.spawnEnemy = function(monName){
         if (monName.localeCompare("wolf")===0)
         {
-            $rootScope.EnemyEXPreward=21;
-            $rootScope.EnemyMoneyreward=0;
-            $scope.EnemyMaxHP=100;
-            $scope.EnemyPdef=1;
-            $scope.EnemyPatk=12;
+        	$scope.EnemyLevel=10;
+            $scope.EnemyEXPreward=41;
+            $scope.EnemyMoneyreward=0;
+            $scope.EnemyMaxHP=138;
+            $scope.EnemyPdef=5;
+            $scope.EnemyPatk=18;
             $scope.enemyImgUrl='/images/wolfsmall.png';
         }
         else if (monName.localeCompare("rabbit")===0)
         {
-            $rootScope.EnemyEXPreward=12;
-            $rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,250),10);
-            $scope.EnemyMaxHP=40;
-            $scope.EnemyPdef=1;
-            $scope.EnemyPatk=5;
+        	$scope.EnemyLevel=5;
+            $scope.EnemyEXPreward=21;
+            $scope.EnemyMoneyreward=parseInt(getRandomInt(50,250),10);
+            $scope.EnemyMaxHP=72;
+            $scope.EnemyPdef=5;
+            $scope.EnemyPatk=15;
             $scope.enemyImgUrl='/images/rabbit.png';
         }
         else if (monName.localeCompare("greenslime")===0)
         {
-            $rootScope.EnemyEXPreward=15;
-            $rootScope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
-            $scope.EnemyMaxHP=45;
-            $scope.EnemyPdef=5;
+        	$scope.EnemyLevel=3;
+            $scope.EnemyEXPreward=13;
+            $scope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
+            $scope.EnemyMaxHP=40;
+            $scope.EnemyPdef=0;
             $scope.EnemyPatk=5;
             $scope.enemyImgUrl='/images/gslime.png';
         }
         else
         {
-            $rootScope.EnemyEXPreward=6;
-            $rootScope.EnemyMoneyreward=0;
-            $scope.EnemyMaxHP=22;
-            $scope.EnemyPdef=2;
+        	$scope.EnemyLevel=1;
+            $scope.EnemyEXPreward=5;
+            $scope.EnemyMoneyreward=0;
+            $scope.EnemyMaxHP=15;
+            $scope.EnemyPdef=0;
             $scope.EnemyPatk=2;
             $scope.enemyImgUrl='/images/slime.png';
         }
@@ -227,17 +291,49 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     }
 
     $scope.goToCombat = function() {
-        $scope.EnemyHP=$scope.EnemyMaxHP;
         $scope.lastLoc=$scope.currentLoc;
-        $scope.imgUrl='images/combat.png';
+        $scope.imgUrl='images/combat2.png';
         $scope.currentLoc='Combat';
         $scope.EnemyHP = $scope.EnemyMaxHP;
 
     };
 
     $scope.attack = function() {
+        $scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getNormalAttackDamage(),10)-$scope.EnemyPdef);
+		$scope.advanceTurn();
+    }
+    
+    $scope.usePotion = function() {
+    	if ($rootScope.currentPotions > 0)
+    	{
+        	$rootScope.characterHP=$rootScope.characterHP+100;
+        	$rootScope.characterMP=$rootScope.characterMP+50;
+        	if ($rootScope.characterHP > $rootScope.characterMaxHP)
+        	{
+        		$rootScope.characterHP=$rootScope.characterMaxHP;
+       		}
+       		if ($rootScope.characterMP > $rootScope.characterMaxMP)
+        	{
+        		$rootScope.characterMP=$rootScope.characterMaxMP;
+       		}
+       		$rootScope.currentPotions=$rootScope.currentPotions-1;
+			$scope.advanceTurn();
+		}
+
+    }
+    
+    $scope.useBomb = function() {
+    	if ($scope.currentBombs > 0)
+    	{
+    		$rootScope.currentBombs=$rootScope.currentBombs-1;
+        	$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10)-$scope.EnemyPdef);
+			$scope.advanceTurn();
+		}
+
+    }
+    
+    $scope.advanceTurn = function() {
         $rootScope.characterHP=$rootScope.characterHP-$scope.EnemyPatk;
-        $scope.EnemyHP=$scope.EnemyHP-(parseInt($scope.getNormalAttackDamage(),10)-$scope.EnemyPdef);
         if ($rootScope.characterHP <= 0)
         {
             defeat();
@@ -246,11 +342,22 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             victory();
         }
     }
-    $scope.getNormalAttackDamage = function(){
-        var low = Math.ceil(0.01*$rootScope.currentSTR+0.25*$rootScope.currentDEX);
-        var high = Math.ceil($rootScope.currentSTR+0.5*$rootScope.currentDEX);
+    $scope.getBombDamage = function(){
+    	var low = 10+Math.ceil(0.1*$rootScope.currentLUK+0.1*$rootScope.currentDEX);
+        var high = 10+Math.ceil(0.4*$rootScope.currentLUK+0.2*$rootScope.currentDEX);
         return parseInt(getRandomInt(low,high),10);
     }
+    $scope.getNormalAttackDamage = function(){
+        var low = parseInt($scope.getLowDamage(),10);
+        var high = parseInt($scope.getHighDamage(),10);
+        return parseInt(getRandomInt(low,high),10);
+    }
+    $scope.getLowDamage = function(){
+    	return Math.ceil(0.2*$rootScope.currentSTR+0.25*$rootScope.currentDEX);
+    };
+    $scope.getHighDamage = function(){
+    	return Math.ceil(1.2*$rootScope.currentSTR+0.5*$rootScope.currentDEX);
+    };
     $scope.run = function() {
         $scope.goToLocation($scope.lastLoc);
         $mdDialog.show(
@@ -266,6 +373,9 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     }
     var victory = function() {
         $rootScope.currentEXP=$rootScope.currentEXP+$scope.EnemyEXPreward;
+        $rootScope.currentMoney=$rootScope.currentMoney+$scope.EnemyMoneyreward;
+        $rootScope.EnemyEXPreward = $scope.EnemyEXPreward;
+        $rootScope.EnemyMoneyreward = $scope.EnemyMoneyreward;
         showVict();
         $scope.goToLocation($scope.lastLoc);
     }
@@ -280,7 +390,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
                 .ok('Cancel')
         );
         $rootScope.currentEXP=0;
-        $scope.goToLocation("Town");
+        $scope.goToNearestTown($scope.lastLoc);
     }
 
 
@@ -296,13 +406,13 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             clickOutsideToClose:true,
             fullscreen: useFullScreen
         }).then(function() {
-
         });
         $scope.$watch(function() {
             return $mdMedia('xs') || $mdMedia('sm');
         }, function(wantsFullScreen) {
             $scope.customFullscreen = (wantsFullScreen === true);
         });
+        
     };
 
     var charString = 'Knight,10,20,30';
@@ -335,9 +445,41 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             $scope.customFullscreen = (wantsFullScreen === true);
         });
     };
-    $scope.goToRest = function(ev) {
-        $rootScope.characterHP=$rootScope.characterMaxHP;
+    $scope.showInventory = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+            controller: "MyCtrl",
+            templateUrl: 'inventory.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        }).then(function() {
 
+        });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+    };
+    $scope.showSkills = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+            controller: "MyCtrl",
+            templateUrl: 'skills.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        }).then(function() {
+
+        });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
     };
 
     $scope.hide = function() {
