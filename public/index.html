@@ -87,7 +87,7 @@
     </div>
     <div ng-show="currentLoc=='Lake'">
 
-        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 1</md-button>
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
         <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='CapitalRoad3'">
@@ -157,9 +157,9 @@
 
         <md-dialog-content>
             <div class="md-dialog-content"  >
-                <p>{{$parent.currentLoc}}</p>
                 <p>Character Name:{{$parent.currentCharName}}</p>
                 <p>HP:{{$parent.characterHP}}/{{$parent.characterMaxHP}}
+                <p>MP:{{$parent.characterMP}}/{{$parent.characterMaxMP}}
                 <p>Level:{{$parent.currentLVL}}</p>
                 <p>EXP:{{$parent.currentEXP}}/{{$parent.nextLvlEXP}}</p>
                 <p>-----Current Stats-----</p>
@@ -235,9 +235,9 @@
         <md-dialog-content>
             <div class="md-dialog-content"  >
                 <p>Click on a skill to learn more about it:</p>
-	        	<div ng-show="{{$parent.currentLUK}}&gt;=10">
-	        		<md-button ng-click="vsCritical()" style="margin-left:5px;">Critical</md-button></p>
-   				</div>
+	        	<md-button ng-click="vsCritical()" style="margin-left:5px;">Critical</md-button></p>
+	        	<md-button ng-click="vsFlashBomb()" style="margin-left:5px;">Flash Bomb</md-button></p>
+	        	<md-button ng-click="vsSmite()" style="margin-left:5px;">Smite</md-button></p>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
@@ -265,7 +265,13 @@
             <div class="md-dialog-content"  >
                 <p>Select a skill to use:</p>
                 <div ng-show="{{$parent.currentLUK}}&gt;=10">
-	        		<md-button ng-click="usCritical()" style="margin-left:5px;">Critical</md-button></p>
+	        		<md-button ng-click="usCritical()" style="margin-left:5px;">Critical (MP: 1)</md-button></p>
+   				</div>
+   				<div ng-show="{{$parent.currentLUK}}&gt;=25">
+	        		<md-button ng-click="usFlashBomb()" style="margin-left:5px;">Flash Bomb (MP: 15, Bomb: 1)</md-button></p>
+   				</div>
+   				<div ng-show="{{$parent.currentLUK}}&gt;=50">
+	        		<md-button ng-click="usSmite()" style="margin-left:5px;">Smite (MP: 25, Bomb: 3)</md-button></p>
    				</div>
         </md-dialog-content>
 

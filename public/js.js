@@ -640,15 +640,57 @@ $scope.login = function(charName,charPassword) {
                 .ok('Cancel')
         );
     };
+    $scope.vsFlashBomb = function() {
+		$mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('Critical. Costs 15 MP and 1 Bomb. Throw a modified bomb to pierce defenses and do more damage. Requires 25 LUK')
+
+                .ok('Cancel')
+        );
+    };
+    $scope.vsSmite = function() {
+		$mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('Critical. Costs 25 MP and 3 Bombs. Rain explosives down on your adversary. Requires 60 LUK')
+
+                .ok('Cancel')
+        );
+    };
     
     $scope.usCritical = function() {
+    	$mdDialog.cancel();
     	if ($rootScope.characterMP >= 1)
     	{
     		$rootScope.characterMP = $rootScope.characterMP - 1;
 			$rootScope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$scope.EnemyPdef);
 			$rootScope.advanceTurn();
 		}
-
+    };
+    $scope.usFlashBomb = function() {
+    	$mdDialog.cancel();
+    	if ($rootScope.characterMP >= 15 & $rootScope.currentBombs >= 1)
+    	{
+    		$rootScope.characterMP = $rootScope.characterMP - 15;
+    		$rootScope.currentBombs = $rootScope.currentBombs - 1;
+			$rootScope.EnemyHP=$scope.EnemyHP-Math.max(1,15+parseInt($scope.getBombDamage(),10)*1.5);
+			$rootScope.advanceTurn();
+		}
+    };
+    $scope.usSmite = function() {
+    	$mdDialog.cancel();
+    	if ($rootScope.characterMP >= 25 & $rootScope.currentBombs >= 3)
+    	{
+    		$rootScope.characterMP = $rootScope.characterMP - 25;
+    		$rootScope.currentBombs = $rootScope.currentBombs - 3;
+			$rootScope.EnemyHP=$scope.EnemyHP-Math.max(1,25+parseInt($scope.getBombDamage(),10)*3);
+			$rootScope.advanceTurn();
+		}
     };
 
     $scope.answer = function(answer) {
