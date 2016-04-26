@@ -33,7 +33,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         };
     }
 
-    $scope.login = function(charName,charPassword) {
+$scope.login = function(charName,charPassword) {
 
         $rootScope.currentCharName = charName;
         var fh = new FormHelper();
@@ -115,11 +115,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         ).error(function(data,status) {
   			console.log(status);      	
         });
-
-
-        
-
-    };
+   };
 
     $scope.checkLvlUp = function(){
         if ($rootScope.currentEXP >= $rootScope.nextLvlEXP)
@@ -141,13 +137,37 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             );
         }
     };
-
+	$scope.update = function(){
+		var fh = new FormHelper();
+		fh.append("name", $rootScope.currentCharName);
+        fh.append("str", $rootScope.currentSTR);
+        fh.append("dex",$rootScope.currentDEX);
+ 		fh.append("int", $rootScope.currentINT);
+ 		fh.append("luk",$rootScope.currentLUK);
+ 		fh.append("exp",$rootScope.currentEXP);
+ 		fh.append("level",$rootScope.currentLVL);
+ 		fh.append("nextlvlexp", $rootScope.nextLvlEXP);
+ 		fh.append("sp", $rootScope.currentSP);
+ 		fh.append("maxhp",$rootScope.characterMaxHP);
+ 		fh.append("maxmp",$rootScope.characterMaxMP);
+ 		fh.append("money",$rootScope.currentMoney);
+ 		fh.append("potions",$rootScope.currentPotions);
+ 		fh.append("bombs",$rootScope.currentBombs);
+        $http({
+            method: 'POST',
+            url: '/update',
+            data: fh.data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function(data) {
+        });
+	};
     $scope.goToTown = function() {
         $scope.currentLoc='Town';
         $scope.imgUrl='/images/startervillage.png';
         $scope.checkLvlUp();
         $rootScope.characterHP=$rootScope.characterMaxHP;
         $rootScope.characterMP=$rootScope.characterMaxMP;
+        $scope.update();
     };
     $scope.goToCapital = function() {
         $scope.currentLoc='Capital';
@@ -155,6 +175,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         $scope.checkLvlUp();
         $rootScope.characterHP=$rootScope.characterMaxHP;
         $rootScope.characterMP=$rootScope.characterMaxMP;
+        $scope.update();
     };
     
     $scope.goToOutside = function() {
@@ -280,7 +301,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     	if ($rootScope.currentMoney >= 50)
         {
             $rootScope.currentPotions = $rootScope.currentPotions + 1;
-            $rootScope.currentMoney = $rootScope.currentMoney -10;
+            $rootScope.currentMoney = $rootScope.currentMoney -50;
         }
     }
     $scope.leaveShop = function(){
@@ -552,6 +573,24 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             $scope.customFullscreen = (wantsFullScreen === true);
         });
     };
+    $scope.useSkill = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+            controller: "MyCtrl",
+            templateUrl: 'useSkill.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        }).then(function() {
+
+        });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+    };
 
     $scope.hide = function() {
         $mdDialog.hide();
@@ -588,6 +627,28 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             $rootScope.currentLUK = $rootScope.currentLUK + 1;
             $rootScope.currentSP = $rootScope.currentSP -1;
         }
+    };
+    
+    $scope.vsCritical = function() {
+		$mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('Critical. Costs 1 MP. Attacks with the normal attack\'s max damage. Requires 10 LUK')
+
+                .ok('Cancel')
+        );
+    };
+    
+    $scope.usCritical = function() {
+    	if ($rootScope.characterMP >= 1)
+    	{
+    		$rootScope.characterMP = $rootScope.characterMP - 1;
+			$rootScope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$scope.EnemyPdef);
+			$rootScope.advanceTurn();
+		}
+
     };
 
     $scope.answer = function(answer) {

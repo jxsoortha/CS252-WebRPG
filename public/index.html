@@ -111,7 +111,7 @@
         <h1 style="font-size:120%;position:fixed; top:82%; left:92%">{{currentBombs}}</h1>
         <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
         <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
-        <md-button style="position:fixed;top:65%;left:75%" class="md-raised"  >Skill</md-button>
+        <md-button style="position:fixed;top:65%;left:75%" class="md-raised" ng-click="useSkill($mdOpenMenu, $event)" >Skill</md-button>
         <md-button style="position:fixed;top:75%;left:75%" class="md-raised" ng-click="usePotion()" ><img ng-src="/images/potion.png"></md-button>
         <md-button style="position:fixed;top:75%;left:85%" class="md-raised" ng-click="useBomb()" ><img ng-src="/images/bomb.png"></md-button>
         <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:50%"/>
@@ -234,8 +234,39 @@
 
         <md-dialog-content>
             <div class="md-dialog-content"  >
-                <p>{{$parent.currentLoc}}</p>
-                <p>Skills</p>
+                <p>Click on a skill to learn more about it:</p>
+	        	<div ng-show="{{$parent.currentLUK}}&gt;=10">
+	        		<md-button ng-click="vsCritical()" style="margin-left:5px;">Critical</md-button></p>
+   				</div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()" style="margin-right:20px;">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    </md-dialog>
+    </script>
+    
+        <script type="text/ng-template" id="useSkill.html" >
+        <md-dialog aria-label="useSkill">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Use a Skill</h2>
+                <span flex></span>
+
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content"  >
+                <p>Select a skill to use:</p>
+                <div ng-show="{{$parent.currentLUK}}&gt;=10">
+	        		<md-button ng-click="usCritical()" style="margin-left:5px;">Critical</md-button></p>
+   				</div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
