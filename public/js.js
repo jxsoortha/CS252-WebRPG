@@ -86,7 +86,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
             $rootScope.currentLVL=$rootScope.currentLVL+1;
             $rootScope.currentSP=$rootScope.currentSP+5;
             $rootScope.currentEXP = $rootScope.currentEXP - $rootScope.nextLvlEXP;
-            $rootScope.nextLvlEXP = Math.pow($scope.currentLVL,2)*12 + $scope.currentLVL*8 + 10;
+            $rootScope.nextLvlEXP = Math.pow($scope.currentLVL,2)*2 + $scope.currentLVL*13 + 15;
             $rootScope.characterMaxHP = $rootScope.characterMaxHP+10+Math.ceil($rootScope.currentSTR*0.2);
             $rootScope.characterMaxMP = $rootScope.characterMaxMP+2+Math.ceil($rootScope.currentINT*0.8);
             $mdDialog.show(
@@ -196,7 +196,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         }
         else if (location.localeCompare("Lake")===0 )
         {
-            $scope.goToLake;
+            $scope.goToLake();
         }
         else if (location.localeCompare("CapitalRoad3")===0 )
         {
@@ -229,10 +229,10 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     	$scope.imgUrl='images/combat.png';
     }
     $scope.buyBomb = function(){
-    	if ($rootScope.currentMoney >= 200)
+    	if ($rootScope.currentMoney >= 120)
         {
             $rootScope.currentBombs = $rootScope.currentBombs + 1;
-            $rootScope.currentMoney = $rootScope.currentMoney -50;
+            $rootScope.currentMoney = $rootScope.currentMoney -120;
         }
     }
     $scope.buyPotion = function(){
@@ -250,32 +250,62 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         if (monName.localeCompare("wolf")===0)
         {
         	$scope.EnemyLevel=10;
-            $scope.EnemyEXPreward=41;
-            $scope.EnemyMoneyreward=0;
-            $scope.EnemyMaxHP=138;
+            $scope.EnemyEXPreward=86;
+            $scope.EnemyMoneyreward=parseInt(getRandomInt(50,70),10);
+            $scope.EnemyMaxHP=200;
             $scope.EnemyPdef=5;
             $scope.EnemyPatk=18;
             $scope.enemyImgUrl='/images/wolfsmall.png';
+        }
+        else if (monName.localeCompare("eyebat")===0)
+        {
+        	$scope.EnemyLevel=11;
+            $scope.EnemyEXPreward=91;
+            $scope.EnemyMoneyreward=0;
+            $scope.EnemyMaxHP=255;
+            $scope.EnemyPdef=0;
+            $scope.EnemyPatk=10;
+            $scope.enemyImgUrl='/images/ironrabbit.png';
+        }
+        else if (monName.localeCompare("ironrabbit")===0)
+        {
+        	$scope.EnemyLevel=20;
+            $scope.EnemyEXPreward=255;
+            $scope.EnemyMoneyreward=parseInt(getRandomInt(512,2048),10);
+            $scope.EnemyMaxHP=900;
+            $scope.EnemyPdef=20;
+            $scope.EnemyPatk=30;
+            $scope.enemyImgUrl='/images/ironrabbit.png';
         }
         else if (monName.localeCompare("rabbit")===0)
         {
         	$scope.EnemyLevel=5;
             $scope.EnemyEXPreward=21;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(50,250),10);
-            $scope.EnemyMaxHP=72;
+            $scope.EnemyMaxHP=90;
             $scope.EnemyPdef=5;
-            $scope.EnemyPatk=15;
+            $scope.EnemyPatk=16;
             $scope.enemyImgUrl='/images/rabbit.png';
         }
         else if (monName.localeCompare("greenslime")===0)
         {
         	$scope.EnemyLevel=3;
-            $scope.EnemyEXPreward=13;
+            $scope.EnemyEXPreward=14;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
             $scope.EnemyMaxHP=40;
             $scope.EnemyPdef=0;
             $scope.EnemyPatk=5;
             $scope.enemyImgUrl='/images/gslime.png';
+        }
+        else if (monName.localeCompare("redslime")===0)
+        {
+        	$scope.EnemyLevel=5;
+            $scope.EnemyEXPreward=22;
+            $scope.EnemyMoneyreward=parseInt(getRandomInt(20,50),10);
+            $scope.EnemyMaxHP=120;
+            $scope.EnemyPdef=0;
+            $scope.EnemyPatk=8;
+            $scope.enemyImgUrl='/images/rslime.png';
         }
         else
         {
@@ -326,7 +356,7 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
     	if ($scope.currentBombs > 0)
     	{
     		$rootScope.currentBombs=$rootScope.currentBombs-1;
-        	$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10)-$scope.EnemyPdef);
+        	$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10));
 			$scope.advanceTurn();
 		}
 
@@ -343,8 +373,8 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         }
     }
     $scope.getBombDamage = function(){
-    	var low = 10+Math.ceil(0.1*$rootScope.currentLUK+0.1*$rootScope.currentDEX);
-        var high = 10+Math.ceil(0.4*$rootScope.currentLUK+0.2*$rootScope.currentDEX);
+    	var low = 20+Math.ceil(0.1*$rootScope.currentLUK+0.1*$rootScope.currentDEX);
+        var high = 50+Math.ceil(0.4*$rootScope.currentLUK+0.2*$rootScope.currentDEX);
         return parseInt(getRandomInt(low,high),10);
     }
     $scope.getNormalAttackDamage = function(){
