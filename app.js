@@ -37,22 +37,68 @@ app.listen(appEnv.port, function() {
   
 });
 
-app.post('/addNewCharacter',function(req,res) {
+app.post('/getCharInfo', function(req,res) {
 	var name = req.body.name;
-	var pwd = req.body.pwd;
-	res.end('got');
 	ibmdb.open("DRIVER={DB2};DATABASE=SQLDB;HOSTNAME=75.126.155.153;UID=user17475;PWD=KPXHTqJk0UWO;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
 	  if (err) return console.log(err);
-	var query_string= "Insert Into character(name,password,statstr,statdex,statint,statluk,exp,level,nextlvlexp,sp,maxhp,maxmp,money) values ('" + name + "','" + pwd + "',1,1,1,1,0,1,30,16,50,20,0)";
+	var query_string="select * from character where name in ('" + name + "')";
+	
  	 conn.query(query_string, function (err, data) {
    		if (err) console.log(err);
-    		else console.log(data);
+    		else {
+			var reply = data[0].STATSTR + "," + data[0].STATDEX + "," + data[0].STATINT + "," + data[0].STATLUK + "," + data[0].EXP + ","+ data[0].LEVEL + "," + data[0].NEXTLVLEXP + "," + data[0].SP + "," + data[0].MAXHP + "," + data[0].MAXMP + ","	 + data[0].MONEY + "," + data[0].POTIONS + "," + data[0].BOMBS;
+			//console.log(data[0].PASSWORD);
+			res.end(reply);
+		}
 
    		 conn.close(function () {
     		  console.log('done');
    	 });
  	 });
 	});
+});
+
+app.post('/auth',function(req,res) {
+	var name = req.body.name;
+	var pwd = req.body.pwd;
+	ibmdb.open("DRIVER={DB2};DATABASE=SQLDB;HOSTNAME=75.126.155.153;UID=user17475;PWD=KPXHTqJk0UWO;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
+	  if (err) return console.log(err);
+	var query_string="select * from character where name in ('" + name + "')";
+	
+ 	 conn.query(query_string, function (err, data) {
+   		if (err) console.log(err);
+    		else {
+			if (data=="") {
+				ibmdb.open("DRIVER={DB2};DATABASE=SQLDB;HOSTNAME=75.126.155.153;UID=user17475;PWD=KPXHTqJk0UWO;PORT=50000;PROTOCOL=TCPIP", function (err,connection) {
+				  if (err) return console.log(err);
+					var query_string2= "Insert Into character(name,password,statstr,statdex,statint,statluk,exp,level,nextlvlexp,sp,maxhp,maxmp,money,potions,bombs) values ('" + name + "','" + pwd + "',1,1,1,1,0,1,30,16,50,20,100,0,0)";
+				 connection.query(query_string2, function (err, data) {
+   					if (err) console.log(err);
+    					else console.log(data);
+
+					 connection.close(function () {
+    				  
+   	 		});
+ 			 });
+			});
+				res.end("empty");
+			} else if (data[0].PASSWORD == pwd) {
+				res.end("validPWD");
+			} else {
+				res.end("wrongPWD");
+			}
+		}
+
+   		 conn.close(function () {
+    		  
+   	 });
+ 	 });
+	});	
+	
+	
+	
+	
+	
 });
 
 app.use(express.static(__dirname + '/public'));

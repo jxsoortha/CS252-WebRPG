@@ -41,31 +41,26 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
         fh.append("pwd",charPassword);
         $http({
             method: 'POST',
-            url: '/addNewCharacter',
+            url: '/auth',
             data: fh.data,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function(data) {
-            console.log(data);
-        }).error(function(data,status) {
-  			console.log(status);      	
-        });
-
-
-        $rootScope.currentSTR=1;
-        $rootScope.currentDEX=1;
-        $rootScope.currentINT=1;
-        $rootScope.currentLUK=1;
-        $rootScope.currentLVL=1;
-        $rootScope.currentEXP=0;
-        $rootScope.nextLvlEXP=30;
-        $rootScope.currentSP=16;
-        $rootScope.characterMaxHP=50;
-        $rootScope.characterMaxMP=20;
-        $rootScope.characterHP=$rootScope.characterMaxHP;
-        $rootScope.characterMP=$rootScope.characterMaxMP=$rootScope.characterMaxMP;
-        $rootScope.currentMoney=100;
-        $rootScope.currentPotions=0;
-        $rootScope.currentBombs=0;
+            if (data=='empty') {
+            	$rootScope.currentSTR=1;
+       	 		$rootScope.currentDEX=1;
+      			$rootScope.currentINT=1;
+   				$rootScope.currentLUK=1;
+                $rootScope.currentLVL=1;
+                $rootScope.currentEXP=0;
+                $rootScope.nextLvlEXP=30;
+                $rootScope.currentSP=16;
+                $rootScope.characterMaxHP=50;
+                $rootScope.characterMaxMP=20;
+                $rootScope.characterHP=$rootScope.characterMaxHP;
+                $rootScope.characterMP=$rootScope.characterMaxMP;
+                $rootScope.currentMoney=100;
+                $rootScope.currentPotions=0;
+                $rootScope.currentBombs=0;
 
         $scope.goToLocation("Town");
         $mdDialog.show(
@@ -77,6 +72,52 @@ MyAPP.controller('MyCtrl', function($rootScope, $scope, $mdDialog,$mdMedia,$loca
 
                 .ok('Cancel')
         );
+            } else if (data=='wrongPWD') {
+            	$mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('Your password is wrong.')
+
+                .ok('Cancel')
+        );
+            } else if (data=='validPWD'){
+            	var fh = new FormHelper();
+            	fh.append("name",charName);
+            	$http({
+            		method: 'POST',
+            		url: '/getCharInfo',
+            		data: fh.data,
+            		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            	}).success(function(data) {
+            		var array = data.split(',');
+            		$rootScope.currentSTR=parseInt(array[0], 10);
+       	 			$rootScope.currentDEX=parseInt(array[1], 10);
+      				$rootScope.currentINT=parseInt(array[2], 10);
+   					$rootScope.currentLUK=parseInt(array[3], 10);
+                	$rootScope.currentLVL=parseInt(array[5], 10);
+             	    $rootScope.currentEXP=parseInt(array[4], 10);
+              	    $rootScope.nextLvlEXP=parseInt(array[6], 10);
+              	    $rootScope.currentSP=parseInt(array[7], 10);
+               	    $rootScope.characterMaxHP=parseInt(array[8], 10);
+                	$rootScope.characterMaxMP=parseInt(array[9], 10);
+                	$rootScope.characterHP=$rootScope.characterMaxHP;
+                	$rootScope.characterMP=$rootScope.characterMaxMP;
+                	$rootScope.currentMoney=parseInt(array[10], 10);
+                	$rootScope.currentPotions=parseInt(array[11], 10);
+                	$rootScope.currentBombs=parseInt(array[12], 10);
+                	$scope.goToLocation("Town");
+            	}); 
+            		
+            	}
+            }
+        ).error(function(data,status) {
+  			console.log(status);      	
+        });
+
+
+        
 
     };
 
