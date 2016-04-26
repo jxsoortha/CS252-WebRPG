@@ -807,7 +807,7 @@ $scope.login = function(charName,charPassword) {
     };
     $scope.usSyphon = function() {
     	
-    	if ($rootScope.characterMP >= 15 & $rootScope.currentBombs >= 1)
+    	if ($rootScope.characterMP >= 15 & $rootScope.currentPotions >= 1)
     	{
     		$rootScope.usedSkill = 1;
     		$rootScope.characterMP = $rootScope.characterMP - 15;
