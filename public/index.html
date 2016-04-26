@@ -123,7 +123,7 @@
         <h1 style="font-size:120%;position:fixed; top:82%; left:92%">{{currentBombs}}</h1>
         <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
         <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
-        <md-button style="position:fixed;top:65%;left:75%" class="md-raised" ng-click="useSkill()" >Skill</md-button>
+        <md-button style="position:fixed;top:65%;left:75%" class="md-raised" ng-click="useSkill($event)" >Skill</md-button>
         <md-button style="position:fixed;top:75%;left:75%" class="md-raised" ng-click="usePotion()" ><img ng-src="/images/potion.png"></md-button>
         <md-button style="position:fixed;top:75%;left:85%" class="md-raised" ng-click="useBomb()" ><img ng-src="/images/bomb.png"></md-button>
         <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:50%"/>
@@ -248,6 +248,8 @@
             <div class="md-dialog-content"  >
                 <p>Click on a skill to learn more about it:</p>
                 <md-button ng-click="vsMagicStrike()" style="margin-left:5px;">Magic Strike</md-button></p>
+                <md-button ng-click="vsSyphon()" style="margin-left:5px;">Syphon</md-button></p>
+                <md-button ng-click="vsBrutalSlash()" style="margin-left:5px;">Brutal Slash</md-button></p>
 	        	<md-button ng-click="vsCritical()" style="margin-left:5px;">Critical</md-button></p>
 	        	<md-button ng-click="vsFlashBomb()" style="margin-left:5px;">Flash Bomb</md-button></p>
 	        	<md-button ng-click="vsSmite()" style="margin-left:5px;">Smite</md-button></p>
@@ -279,6 +281,12 @@
                 <p>Select a skill to use:</p>
                 <div ng-show="{{$parent.currentINT}}&gt;=5">
 	        		<md-button ng-click="usMagicStrike()" style="margin-left:5px;">Magic Strike (MP: 8)</md-button></p>
+   				</div>
+   				<div ng-show="{{$parent.currentINT}}&gt;=15">
+	        		<md-button ng-click="usSyphon()" style="margin-left:5px;">Syphon (MP: 15, Potion: 1)</md-button></p>
+   				</div>
+   				<div ng-show="{{$parent.currentSTR}}&gt;=30">
+	        		<md-button ng-click="usBrutalSlash()" style="margin-left:5px;">Brutal Slash (MP: 12)</md-button></p>
    				</div>
                 <div ng-show="{{$parent.currentLUK}}&gt;=10">
 	        		<md-button ng-click="usCritical()" style="margin-left:5px;">Critical (MP: 1)</md-button></p>
