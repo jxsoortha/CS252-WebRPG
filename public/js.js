@@ -315,7 +315,8 @@ $scope.login = function(charName,charPassword) {
             $scope.EnemyEXPreward=86;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(50,70),10);
             $scope.EnemyMaxHP=200;
-            $scope.EnemyPdef=5;
+            $rootScope.EnemyPdef=15;
+            $rootScope.EnemyMdef=15;
             $scope.EnemyPatk=18;
             $scope.enemyImgUrl='/images/wolfsmall.png';
         }
@@ -325,7 +326,8 @@ $scope.login = function(charName,charPassword) {
             $scope.EnemyEXPreward=91;
             $scope.EnemyMoneyreward=0;
             $scope.EnemyMaxHP=255;
-            $scope.EnemyPdef=0;
+            $rootScope.EnemyPdef=0;
+            $rootScope.EnemyMdef=15;
             $scope.EnemyPatk=10;
             $scope.enemyImgUrl='/images/ironrabbit.png';
         }
@@ -335,47 +337,52 @@ $scope.login = function(charName,charPassword) {
             $scope.EnemyEXPreward=255;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(512,2048),10);
             $scope.EnemyMaxHP=900;
-            $scope.EnemyPdef=20;
+            $rootScope.EnemyPdef=20;
+            $rootScope.EnemyMdef=0;
             $scope.EnemyPatk=30;
             $scope.enemyImgUrl='/images/ironrabbit.png';
         }
         else if (monName.localeCompare("rabbit")===0)
         {
         	$scope.EnemyLevel=5;
-            $scope.EnemyEXPreward=21;
+            $scope.EnemyEXPreward=32;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(50,250),10);
             $scope.EnemyMaxHP=90;
-            $scope.EnemyPdef=5;
+            $rootScope.EnemyPdef=5;
+            $rootScope.EnemyMdef=0;
             $scope.EnemyPatk=16;
             $scope.enemyImgUrl='/images/rabbit.png';
         }
         else if (monName.localeCompare("greenslime")===0)
         {
         	$scope.EnemyLevel=3;
-            $scope.EnemyEXPreward=14;
+            $scope.EnemyEXPreward=18;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(10,20),10);
             $scope.EnemyMaxHP=40;
-            $scope.EnemyPdef=0;
+            $rootScope.EnemyPdef=0;
+            $rootScope.EnemyMdef=-2;
             $scope.EnemyPatk=5;
             $scope.enemyImgUrl='/images/gslime.png';
         }
         else if (monName.localeCompare("redslime")===0)
         {
         	$scope.EnemyLevel=5;
-            $scope.EnemyEXPreward=22;
+            $scope.EnemyEXPreward=35;
             $scope.EnemyMoneyreward=parseInt(getRandomInt(20,50),10);
             $scope.EnemyMaxHP=120;
-            $scope.EnemyPdef=0;
+            $rootScope.EnemyPdef=0;
+            $rootScope.EnemyMdef=-2;
             $scope.EnemyPatk=8;
             $scope.enemyImgUrl='/images/rslime.png';
         }
         else
         {
         	$scope.EnemyLevel=1;
-            $scope.EnemyEXPreward=5;
+            $scope.EnemyEXPreward=6;
             $scope.EnemyMoneyreward=0;
             $scope.EnemyMaxHP=15;
-            $scope.EnemyPdef=0;
+            $rootScope.EnemyPdef=0;
+            $rootScope.EnemyMdef=-2;
             $scope.EnemyPatk=2;
             $scope.enemyImgUrl='/images/slime.png';
         }
@@ -386,13 +393,13 @@ $scope.login = function(charName,charPassword) {
         $scope.lastLoc=$scope.currentLoc;
         $scope.imgUrl='images/combat2.png';
         $scope.currentLoc='Combat';
-        $scope.EnemyHP = $scope.EnemyMaxHP;
+        $rootScope.EnemyHP = $scope.EnemyMaxHP;
 
     };
 
     $scope.attack = function() {
-        $scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getNormalAttackDamage(),10)-$scope.EnemyPdef);
-		$scope.advanceTurn();
+        $rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getNormalAttackDamage(),10)-$rootScope.EnemyPdef);
+		$rootScope.advanceTurn();
     }
     
     $scope.usePotion = function() {
@@ -409,7 +416,7 @@ $scope.login = function(charName,charPassword) {
         		$rootScope.characterMP=$rootScope.characterMaxMP;
        		}
        		$rootScope.currentPotions=$rootScope.currentPotions-1;
-			$scope.advanceTurn();
+			$rootScope.advanceTurn();
 		}
 
     }
@@ -418,19 +425,19 @@ $scope.login = function(charName,charPassword) {
     	if ($scope.currentBombs > 0)
     	{
     		$rootScope.currentBombs=$rootScope.currentBombs-1;
-        	$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10));
-			$scope.advanceTurn();
+        	$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10));
+			$rootScope.advanceTurn();
 		}
 
     }
     
-    $scope.advanceTurn = function() {
+    $rootScope.advanceTurn = function() {
         $rootScope.characterHP=$rootScope.characterHP-$scope.EnemyPatk;
         if ($rootScope.characterHP <= 0)
         {
             defeat();
         }
-        else if ($scope.EnemyHP <= 0) {
+        else if ($rootScope.EnemyHP <= 0) {
             victory();
         }
     }
@@ -444,11 +451,22 @@ $scope.login = function(charName,charPassword) {
         var high = parseInt($scope.getHighDamage(),10);
         return parseInt(getRandomInt(low,high),10);
     }
+    $scope.getMagicDamage = function(){
+        var low = parseInt($scope.getLowMagicDamage(),10);
+        var high = parseInt($scope.getHighMagicDamage(),10);
+        return parseInt(getRandomInt(low,high),10);
+    }
     $scope.getLowDamage = function(){
     	return Math.ceil(0.2*$rootScope.currentSTR+0.25*$rootScope.currentDEX);
     };
     $scope.getHighDamage = function(){
     	return Math.ceil(1.2*$rootScope.currentSTR+0.5*$rootScope.currentDEX);
+    };
+    $scope.getLowMagicDamage = function(){
+    	return Math.ceil(0.5*$rootScope.currentINT+0.1*$rootScope.currentLUK);
+    };
+    $scope.getHighMagicDamage = function(){
+    	return Math.ceil(1.5*$rootScope.currentINT+0.2*$rootScope.currentLUK);
     };
     $scope.run = function() {
         $scope.goToLocation($scope.lastLoc);
@@ -629,6 +647,17 @@ $scope.login = function(charName,charPassword) {
         }
     };
     
+    $scope.vsMagicStrike = function() {
+		$mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+
+                .textContent('MagicStrike. Costs 8 MP. A basic but effective magical attack with damage based mostly on INT and somewhat on LUK. Requires 5 INT')
+
+                .ok('Cancel')
+        );
+    };
     $scope.vsCritical = function() {
 		$mdDialog.show(
             $mdDialog.alert()
@@ -646,7 +675,7 @@ $scope.login = function(charName,charPassword) {
                 .parent(angular.element(document.querySelector('#popupContainer')))
                 .clickOutsideToClose(true)
 
-                .textContent('Critical. Costs 15 MP and 1 Bomb. Throw a modified bomb to pierce defenses and do more damage. Requires 25 LUK')
+                .textContent('Flash Bomb. Costs 15 MP and 1 Bomb. Throw a modified bomb to pierce defenses and do more damage. Requires 25 LUK')
 
                 .ok('Cancel')
         );
@@ -657,19 +686,28 @@ $scope.login = function(charName,charPassword) {
                 .parent(angular.element(document.querySelector('#popupContainer')))
                 .clickOutsideToClose(true)
 
-                .textContent('Critical. Costs 25 MP and 3 Bombs. Rain explosives down on your adversary. Requires 60 LUK')
+                .textContent('Smite. Costs 25 MP and 3 Bombs. Rain explosives down on your adversary. Requires 60 LUK')
 
                 .ok('Cancel')
         );
     };
     
+    $scope.usMagicStrike = function() {
+    	$mdDialog.cancel();
+    	if ($rootScope.characterMP >= 8)
+    	{
+    		$rootScope.characterMP = $rootScope.characterMP - 8;
+			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getMagicDamage(),10)-$rootScope.EnemyMdef);
+			$rootScope.advanceTurn();
+		}
+    };
     $scope.usCritical = function() {
     	$mdDialog.cancel();
     	if ($rootScope.characterMP >= 1)
     	{
     		$rootScope.characterMP = $rootScope.characterMP - 1;
-			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$scope.EnemyPdef);
-			$scope.advanceTurn();
+			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$rootScope.EnemyPdef);
+			$rootScope.advanceTurn();
 		}
     };
     $scope.usFlashBomb = function() {
@@ -678,8 +716,8 @@ $scope.login = function(charName,charPassword) {
     	{
     		$rootScope.characterMP = $rootScope.characterMP - 15;
     		$rootScope.currentBombs = $rootScope.currentBombs - 1;
-			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,15+parseInt($scope.getBombDamage(),10)*1.5);
-			$scope.advanceTurn();
+			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,15+parseInt($scope.getBombDamage(),10)*1.5);
+			$rootScope.advanceTurn();
 		}
     };
     $scope.usSmite = function() {
@@ -688,8 +726,8 @@ $scope.login = function(charName,charPassword) {
     	{
     		$rootScope.characterMP = $rootScope.characterMP - 25;
     		$rootScope.currentBombs = $rootScope.currentBombs - 3;
-			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,25+parseInt($scope.getBombDamage(),10)*3);
-			$scope.advanceTurn();
+			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,25+parseInt($scope.getBombDamage(),10)*3);
+			$rootScope.advanceTurn();
 		}
     };
 
