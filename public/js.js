@@ -237,6 +237,7 @@ $scope.login = function(charName,charPassword) {
         $scope.currentLoc='CapitalRoad3';
         $scope.imgUrl='/images/outsidecapital.png';
         var RNG = parseInt(getRandomInt(0,10),10);
+        
         if (RNG > 4)
         {
             $scope.spawnEnemy("greenslime");
@@ -244,6 +245,68 @@ $scope.login = function(charName,charPassword) {
         else
         {
             $scope.spawnEnemy("slime");
+        }
+
+    };
+    $scope.goToValley = function() {
+        $scope.currentLoc='Valley';
+        $scope.imgUrl='/images/valley1.png';
+        var RNG = parseInt(getRandomInt(0,10),10);
+        if (RNG === 0)
+        {
+            //attacked on entry
+            $scope.spawnEnemy("wolf");
+            $scope.goToCombat();
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+
+                    .textContent('You have been ambushed!')
+
+                    .ok('Cancel')
+            );
+        }
+        else if (RNG > 3)
+        {
+            $scope.spawnEnemy("redslime");
+        }
+        else
+        {
+            $scope.spawnEnemy("wolf");
+        }
+
+    };
+    $scope.goToCaveEntrance = function() {
+        $scope.currentLoc='CaveEntrance';
+        $scope.imgUrl='/images/valley1.png';
+        var RNG = parseInt(getRandomInt(0,10),10);
+        if (RNG === 0)
+        {
+            //attacked on entry
+            $scope.spawnEnemy("eyebat");
+            $scope.goToCombat();
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+
+                    .textContent('You have been ambushed!')
+
+                    .ok('Cancel')
+            );
+        }
+        else if (RNG > 3)
+        {
+            $scope.spawnEnemy("wolf");
+        }
+        else if (RNG === 9)
+        {
+        	$scope.spawnEnemy("ironrabbit");
+        }
+        else
+        {
+            $scope.spawnEnemy("eyebat");
         }
 
     };
@@ -264,6 +327,14 @@ $scope.login = function(charName,charPassword) {
         {
             $scope.goToCapitalRoad3();
         }
+        else if (location.localeCompare("Valley")===0 )
+        {
+            $scope.goToValley();
+        }
+        else if (location.localeCompare("CaveEntrance")===0 )
+        {
+            $scope.goToCaveEntrance();
+        }
         else if (location.localeCompare("Capital")===0 )
         {
             $scope.goToCapital();
@@ -274,7 +345,7 @@ $scope.login = function(charName,charPassword) {
         }
     }
     $scope.goToNearestTown = function(location) {
-        if (location.localeCompare("CapitalRoad3")===0 || location.localeCompare("Capital")===0)
+        if (location.localeCompare("CapitalRoad3")===0 || location.localeCompare("Capital")===0 || location.localeCompare("Valley")===0 || location.localeCompare("CaveEntrance")===0 )
         {
             $scope.goToCapital();
         }
@@ -393,13 +464,13 @@ $scope.login = function(charName,charPassword) {
         $scope.lastLoc=$scope.currentLoc;
         $scope.imgUrl='images/combat2.png';
         $scope.currentLoc='Combat';
-        $rootScope.EnemyHP = $scope.EnemyMaxHP;
+        $scope.EnemyHP = $scope.EnemyMaxHP;
 
     };
 
     $scope.attack = function() {
-        $rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getNormalAttackDamage(),10)-$rootScope.EnemyPdef);
-		$rootScope.advanceTurn();
+        $scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getNormalAttackDamage(),10)-$rootScope.EnemyPdef);
+		$scope.advenceTurn();
     }
     
     $scope.usePotion = function() {
@@ -416,7 +487,7 @@ $scope.login = function(charName,charPassword) {
         		$rootScope.characterMP=$rootScope.characterMaxMP;
        		}
        		$rootScope.currentPotions=$rootScope.currentPotions-1;
-			$rootScope.advanceTurn();
+			$scope.advenceTurn();
 		}
 
     }
@@ -425,19 +496,19 @@ $scope.login = function(charName,charPassword) {
     	if ($scope.currentBombs > 0)
     	{
     		$rootScope.currentBombs=$rootScope.currentBombs-1;
-        	$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10));
-			$rootScope.advanceTurn();
+        	$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getBombDamage(),10));
+			$scope.advenceTurn();
 		}
 
     }
     
-    $rootScope.advanceTurn = function() {
+    $scope.advenceTurn = function() {
         $rootScope.characterHP=$rootScope.characterHP-$scope.EnemyPatk;
         if ($rootScope.characterHP <= 0)
         {
             defeat();
         }
-        else if ($rootScope.EnemyHP <= 0) {
+        else if ($scope.EnemyHP <= 0) {
             victory();
         }
     }
@@ -593,6 +664,7 @@ $scope.login = function(charName,charPassword) {
     };
     $scope.useSkill = function(ev) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $scope.usedSkill = 0;
         $mdDialog.show({
             controller: "MyCtrl",
             templateUrl: 'useSkill.html',
@@ -601,13 +673,14 @@ $scope.login = function(charName,charPassword) {
             clickOutsideToClose:true,
             fullscreen: useFullScreen
         }).then(function() {
-
+			
         });
         $scope.$watch(function() {
             return $mdMedia('xs') || $mdMedia('sm');
         }, function(wantsFullScreen) {
             $scope.customFullscreen = (wantsFullScreen === true);
         });
+        $scope.advenceTurn();
     };
 
     $scope.hide = function() {
@@ -693,42 +766,49 @@ $scope.login = function(charName,charPassword) {
     };
     
     $scope.usMagicStrike = function() {
-    	$mdDialog.cancel();
+    	
     	if ($rootScope.characterMP >= 8)
     	{
+    		$scope.usedSkill = 1;
     		$rootScope.characterMP = $rootScope.characterMP - 8;
-			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getMagicDamage(),10)-$rootScope.EnemyMdef);
-			$rootScope.advanceTurn();
+			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getMagicDamage(),10)-$rootScope.EnemyMdef);
+			$scope.advenceTurn();
 		}
+		$mdDialog.cancel();
     };
     $scope.usCritical = function() {
-    	$mdDialog.cancel();
     	if ($rootScope.characterMP >= 1)
     	{
+    		$scope.usedSkill = 1;
     		$rootScope.characterMP = $rootScope.characterMP - 1;
-			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$rootScope.EnemyPdef);
-			$rootScope.advanceTurn();
+			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,parseInt($scope.getHighDamage(),10)-$rootScope.EnemyPdef);
+			$scope.advenceTurn();
 		}
+		$mdDialog.cancel();
     };
     $scope.usFlashBomb = function() {
-    	$mdDialog.cancel();
+
     	if ($rootScope.characterMP >= 15 & $rootScope.currentBombs >= 1)
     	{
+    		$scope.usedSkill = 1;
     		$rootScope.characterMP = $rootScope.characterMP - 15;
     		$rootScope.currentBombs = $rootScope.currentBombs - 1;
-			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,15+parseInt($scope.getBombDamage(),10)*1.5);
-			$rootScope.advanceTurn();
+			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,15+parseInt($scope.getBombDamage(),10)*1.5);
+			$scope.advenceTurn();
 		}
+		$mdDialog.cancel();
     };
     $scope.usSmite = function() {
-    	$mdDialog.cancel();
+
     	if ($rootScope.characterMP >= 25 & $rootScope.currentBombs >= 3)
     	{
+    		$scope.usedSkill = 1;
     		$rootScope.characterMP = $rootScope.characterMP - 25;
     		$rootScope.currentBombs = $rootScope.currentBombs - 3;
-			$rootScope.EnemyHP=$rootScope.EnemyHP-Math.max(1,25+parseInt($scope.getBombDamage(),10)*3);
-			$rootScope.advanceTurn();
+			$scope.EnemyHP=$scope.EnemyHP-Math.max(1,25+parseInt($scope.getBombDamage(),10)*3);
+			$scope.advenceTurn();
 		}
+		$mdDialog.cancel();
     };
 
     $scope.answer = function(answer) {

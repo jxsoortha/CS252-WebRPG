@@ -91,9 +91,21 @@
         <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='CapitalRoad3'">
+		
+		<md-button id="button1" class="md-raised" ng-click="goToCapital()">Enter Capital</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
+        <md-button id="button3" class="md-raised" ng-click="goToValley()">Go to the Valley</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
+    </div>
+    <div ng-show="currentLoc=='Valley'">
 
-        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad2()">Go to Capital Road 2</md-button>
-        <md-button id="button2" class="md-raised" ng-click="goToCapital()">Enter Capital</md-button>
+        <md-button id="button1" class="md-raised" ng-click="goToCapitalRoad3()">Go to Capital Road 3</md-button>
+        <md-button id="button2" class="md-raised" ng-click="goToCaveEntrance()">Go into the Caves</md-button>
+        <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
+    </div>
+    <div ng-show="currentLoc=='CaveEntrance'">
+
+        <md-button id="button1" class="md-raised" ng-click="goToValley()">Go back to the Valley</md-button>
         <md-button id="buttonC" class="md-raised" ng-click="goToCombat()">Hunt</md-button>
     </div>
     <div ng-show="currentLoc=='Town'">
@@ -111,7 +123,7 @@
         <h1 style="font-size:120%;position:fixed; top:82%; left:92%">{{currentBombs}}</h1>
         <md-button style="position:fixed;top:65%;left:65%" class="md-raised" ng-click="attack()" >Attack</md-button>
         <md-button style="position:fixed;top:75%;left:65%" class="md-raised" ng-click="run()" >Run</md-button>
-        <md-button style="position:fixed;top:65%;left:75%" class="md-raised" ng-click="useSkill($mdOpenMenu, $event)" >Skill</md-button>
+        <md-button style="position:fixed;top:65%;left:75%" class="md-raised" ng-click="useSkill()" >Skill</md-button>
         <md-button style="position:fixed;top:75%;left:75%" class="md-raised" ng-click="usePotion()" ><img ng-src="/images/potion.png"></md-button>
         <md-button style="position:fixed;top:75%;left:85%" class="md-raised" ng-click="useBomb()" ><img ng-src="/images/bomb.png"></md-button>
         <img ng-src="{{enemyImgUrl}}" style="position:fixed;top:10%;left:50%"/>
