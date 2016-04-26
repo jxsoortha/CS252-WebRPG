@@ -58,6 +58,40 @@ app.post('/getCharInfo', function(req,res) {
 	});
 });
 
+app.post('/update', function(req,res) {
+	var name = req.body.name;
+	var str = req.body.str;
+	var dex = req.body.dex;
+	var int = req.body.int;
+	var luk = req.body.luk;
+	var exp = req.body.exp;
+	var level = req.body.level;
+	var nextlvlexp = req.body.nextlvlexp;
+	var sp = req.body.sp;
+	var maxhp = req.body.maxhp;
+	var maxmp = req.body.maxmp;
+	var money = req.body.money;
+	var potions = req.body.potions;
+	var bombs = req.body.bombs;
+	ibmdb.open("DRIVER={DB2};DATABASE=SQLDB;HOSTNAME=75.126.155.153;UID=user17475;PWD=KPXHTqJk0UWO;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
+	  if (err) return console.log(err);
+	var query_string="update character set statstr = " + str + ",statdex = " + dex + ",statint = " + int + ",statluk = " + luk + ",exp = " + exp + ",level = " + level  + ",nextlvlexp = " + nextlvlexp + ",sp = " + sp + ",maxhp = " + maxhp + ",maxmp = " + maxmp + ",money=" + money + ",potions = " + potions + ",bombs = " + bombs + " where name in ('" + name + "')"; 
+	
+ 	 conn.query(query_string, function (err, data) {
+   		if (err) console.log(err);
+    		else {
+				res.end("got");
+			
+		}
+
+   		 conn.close(function () {
+    		  console.log('done');
+   	 });
+ 	 });
+	});
+}); 
+
+
 app.post('/auth',function(req,res) {
 	var name = req.body.name;
 	var pwd = req.body.pwd;
